@@ -1,9 +1,14 @@
 package spaceinvaders;
 import java.util.*;
 
-
+/**
+ * Classe main
+ * @author Nicho
+ */
 public class SpaceInvaders {
-
+    /**
+     * Metodo main
+     */
     public static void main(String[] args) {
         Jogo jogo = new Jogo();
         jogo.rodar();
