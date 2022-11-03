@@ -16,7 +16,7 @@ public class Tela {
             System.out.println(" oi");
             System.out.println(ent.getSprite().getSprite());
         }
-        tela[ent.getX()][ent.getY()] = ent.getSprite().getSprite();
+        tela[ent.getX()][ent.getY()] = ent.getSprite().getSprite().charAt(0);
     }
     
     public void imprimeTela(){

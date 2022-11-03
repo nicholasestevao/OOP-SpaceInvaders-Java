@@ -62,7 +62,7 @@ public class Entidade {
         return this.sprite;
     }
     
-    public void setSprite(char s){
+    public void setSprite(String s){
         this.sprite.setSprite(s);
     }
 }

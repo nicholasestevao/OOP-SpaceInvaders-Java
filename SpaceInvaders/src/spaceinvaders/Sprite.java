@@ -7,7 +7,7 @@ import java.awt.Image;
  * @author Nicho
  */
 public class Sprite {
-    private char sprite;   
+    private String sprite;   
     
     
     /**
@@ -19,16 +19,16 @@ public class Sprite {
      * Construtor que recebe a imagem da entidade
      * @param image 
      */
-    public Sprite(/*Image image*/ char sprite) {
+    public Sprite(/*Image image*/ String sprite) {
         //this.image = image;
         this.sprite = sprite;
     }
     
-    public char getSprite(){
+    public String getSprite(){
         return this.sprite;
     }
     
-    public void setSprite(char s){
+    public void setSprite(String s){
         this.sprite = s;
     }
 

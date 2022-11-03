@@ -11,7 +11,15 @@ public class SpaceInvaders {
      */
     public static void main(String[] args) {
         Jogo jogo = new Jogo();
-        jogo.rodar();
+        int delayAliens = 3;
+        while(true){
+            jogo.rodar(delayAliens);
+            if(delayAliens >0){
+                delayAliens--;
+            }
+            jogo = new Jogo();
+        }
+        
         /*System.out.println("oi");
         try{TimeUnit.SECONDS.sleep(2);
         }catch(Exception e){

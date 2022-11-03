@@ -21,7 +21,7 @@ public class Nave extends Entidade implements Movivel {
      */
     public Tiro atirar() {
         int tipo = 1; //tipo tiro alien
-        return new Tiro(this.getX()-1, this.getY(), tipo, new Sprite('!'));
+        return new Tiro(this.getX()+1, this.getY(), tipo, new Sprite("!"));
     }
 
     /**

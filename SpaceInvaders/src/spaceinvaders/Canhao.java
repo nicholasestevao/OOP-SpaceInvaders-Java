@@ -25,7 +25,7 @@ public class Canhao extends Entidade implements Movivel {
      */
     public Tiro atirar() {
         int tipo = 0; //tipo tiro canhao
-        return new Tiro(this.getX()-1, this.getY(), tipo, new Sprite('i'));
+        return new Tiro(this.getX()-1, this.getY(), tipo, new Sprite("i"));
     }
 
     /**
