@@ -1,6 +1,6 @@
-package spaceinvaders;
-import java.util.*;
-import java.awt.Image;
+package spaceinvaders.interfaceGrafica;
+//import java.util.*;
+//import java.awt.Image;
 
 /**
  * Classe que armazena imagens das entidades na tela
@@ -17,7 +17,7 @@ public class Sprite {
 
     /**
      * Construtor que recebe a imagem da entidade
-     * @param image 
+     * @param sprite caractere vinculado a essa sprite (sera substituido por uma imagem)
      */
     public Sprite(/*Image image*/ String sprite) {
         //this.image = image;

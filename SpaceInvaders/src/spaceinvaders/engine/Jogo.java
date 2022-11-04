@@ -1,6 +1,12 @@
-package spaceinvaders;
+package spaceinvaders.engine;
+import spaceinvaders.elementos.Canhao;
+import spaceinvaders.elementos.Nave;
+import spaceinvaders.elementos.Base;
+import spaceinvaders.elementos.Tiro;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import spaceinvaders.interfaceGrafica.Sprite;
+import spaceinvaders.interfaceGrafica.Tela;
 
 /**
  * Classe Jogo:
@@ -82,7 +88,17 @@ public class Jogo {
         this.naves = new ArrayList<Nave>();
         for(int i=0; i<5; i++){
             for(int j=0; j<11; j++){
-                Nave ship = new Nave(i,j, new Sprite("N"));
+                String s = "_";
+                if(i==0){
+                    s = "Y";
+                }
+                if(i==1 || i ==2){
+                    s = "N";
+                }
+                if(i==3 || i ==4){
+                    s = "W";
+                }
+                Nave ship = new Nave(i,j, new Sprite(s));
                 this.naves.add(ship);
             }
         }
@@ -94,7 +110,7 @@ public class Jogo {
     /**
      * Retorna a nave da posicao [X,Y] da tela se ela existir
      */
-     public Nave getNave(int x, int y){
+     private Nave getNave(int x, int y){
         for(int i = 0; i<this.naves.size(); i++){
             if(this.naves.get(i).getX() == x && this.naves.get(i).getY() == y){
                 return this.naves.get(i);
@@ -106,7 +122,7 @@ public class Jogo {
     /**
      * Move o bloco de naves de acordo com o padrão do jogo
      */
-    public void moveNaves(){
+    private void moveNaves(){
         int yMax = 0;
         int yMin = Tela.tamY - 1;
         for(int i=0; i<this.naves.size(); i++){
@@ -164,6 +180,25 @@ public class Jogo {
          */
         int contReload = 0;
         
+        /**
+         * Indica se esta sendo exibida a nave especial no topo da tela que vale mais pontos
+         */
+        int flagNaveEspecial = 0;
+        /**
+         * Nave espcial que vale mais pontos
+         */
+        Nave naveEspecial = new Nave(0,0, new Sprite("E"));
+        
+        /**
+         * Flag que armazena se o canhao ja atirou
+         */
+        int flagCanhaoAtirou = 0;
+        
+        /**
+         * Flag que armazena se os aliens ja aceleraram
+         */
+        int flagAcelerou = 0;
+        
         //Inicializa tela
         Tela tela = new Tela();
 
@@ -176,7 +211,7 @@ public class Jogo {
             System.out.println("Nenhuma ação -> f");
             
             //Insere bases na tela
-            ArrayList<Integer> remover = new ArrayList();
+            ArrayList<Integer> remover = new ArrayList<Integer>();
             this.bases.forEach( (base) ->{
                 tela.insereTela(base);
                 if(base.getSprite().getSprite() == "X"){                    
@@ -192,6 +227,9 @@ public class Jogo {
                 tela.insereTela(canhao);
                 if(canhao.getSprite().getSprite() == "X"){
                     canhao.setSprite("C");
+                    // Volta canhao para posicao inicial
+                    canhao.setX(14);
+                    canhao.setY(2);
                 }
             }else{
                 // Fim da fase
@@ -203,6 +241,32 @@ public class Jogo {
             //Move bloco de naves na velocidade determinada pelo delayAliens
             if(contReload%delayAliens == 0){
                 this.moveNaves();
+                 if(System.currentTimeMillis()%37 == 0 && flagNaveEspecial == 0){
+                     //Aparece nave especial no topo
+                     flagNaveEspecial = 1;
+                     naveEspecial.setX(1);
+                     naveEspecial.setY(0);            
+                     
+                 }
+                 if(flagNaveEspecial == 1 && naveEspecial.getY() < Tela.tamY -1){
+                     naveEspecial.mover(0,1);
+                 }else{
+                     flagNaveEspecial = 0;
+                 }
+                 //Quando chega na metade da quantidade de aliens eles passam a se mover mais rapido
+                 if(this.naves.size() == 27 && flagAcelerou == 0){
+                     delayAliens--;
+                     flagAcelerou = 1;
+                 }
+            }
+            if(flagNaveEspecial == 1){
+                tela.insereTela(naveEspecial);
+                if(System.currentTimeMillis()%3 == 0){
+                    this.tiros.add(naveEspecial.atirar());
+                }
+                if(naveEspecial.getSprite().getSprite() == "X"){
+                    flagNaveEspecial = 0;
+                }
             }
             
             //Insere naves na tela
@@ -233,7 +297,7 @@ public class Jogo {
                 System.out.println("Os alienígenas te alcançaram :(");
                 break;
             }
-            if(this.naves.size() == 0){
+            if(this.naves.size() + flagNaveEspecial == 0){
                 this.rodando = 0;  
                 System.out.println("Parabéns! Você ganhou :)");
                 break;
@@ -241,7 +305,7 @@ public class Jogo {
 
             //De vez em quando uma nave da fileira do canhao atira
             if(System.currentTimeMillis()%7 == 0){
-                ArrayList<Nave> navesFileiraCanhao = new ArrayList();
+                ArrayList<Nave> navesFileiraCanhao = new ArrayList<Nave>();
                 this.naves.forEach((nave)->{
                     if(nave.getY() == canhao.getY()){
                         navesFileiraCanhao.add(nave);
@@ -274,7 +338,11 @@ public class Jogo {
                     this.canhao.mover(0, 1);
                     break;
                 case 's':
-                    this.tiros.add(this.canhao.atirar()); 
+                    //Garante que o canhao só dê um tiro de cada vez
+                    if(flagCanhaoAtirou == 0){
+                        this.tiros.add(this.canhao.atirar()); 
+                        flagCanhaoAtirou = 1;
+                    }                    
                     break;  
                 case 'f':
                     break;
@@ -302,12 +370,18 @@ public class Jogo {
                         //Se o tiro é do canhao
                         if(tiro.getX() > 1){
                             tiro.mover(-1, 0);
-                            if(tela.getSprite(tiro.getX(), tiro.getY()) == 'N'){
+                            if(tela.getSprite(tiro.getX(), tiro.getY()) == 'Y' ||
+                               tela.getSprite(tiro.getX(), tiro.getY()) == 'N' ||
+                               tela.getSprite(tiro.getX(), tiro.getY()) == 'W' ||
+                               tela.getSprite(tiro.getX(), tiro.getY()) == 'E'){
                                 //Tiro colidiu com uma nave 
                                 Nave nave = this.getNave(tiro.getX(), tiro.getY());
                                 if(nave != null){nave.setSprite("X");};
                                 remover.add(this.tiros.indexOf(tiro));
                                 this.pontuacao += 10;
+                                if(tela.getSprite(tiro.getX(), tiro.getY()) == 'E'){
+                                    this.pontuacao +=40;
+                                }
                             }
                         }else{
                             remover.add(this.tiros.indexOf(tiro));
@@ -332,9 +406,15 @@ public class Jogo {
             });
             
             //Remove tiros que colidiram com algo ou chegaram no fim da tela
-            remover.forEach(indice -> {
-                if(indice < this.tiros.size()){
-                    this.tiros.remove((int) indice);}});
+            for(int i =0; i<remover.size(); i++){
+                if(remover.get(i) < this.tiros.size()){
+                    if(this.tiros.get(remover.get(i)).getTipo() == 0){
+                        //Permite que o canhao atire de novo
+                        flagCanhaoAtirou = 0;
+                    }
+                    this.tiros.remove((int) remover.get(i));
+                }
+            }                
             remover.clear();
             
             // Insere tiros na tela
@@ -348,11 +428,11 @@ public class Jogo {
             this.bases.forEach(base -> {System.out.print(base.getEstado()+" ");});
             System.out.println("");
             
-            try{
+            /*try{
                 TimeUnit.MILLISECONDS.sleep(500);
             }catch(Exception e){
                 System.out.println(e.getMessage());
-            }
+            }*/
             
         }
     }

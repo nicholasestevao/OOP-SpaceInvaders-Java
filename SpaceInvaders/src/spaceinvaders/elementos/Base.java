@@ -1,5 +1,6 @@
-package spaceinvaders;
+package spaceinvaders.elementos;
 import java.util.*;
+import spaceinvaders.interfaceGrafica.Sprite;
 /**
  * Classe Base:
  * São os blocos fixos na tela atrás dos quais o jogado pode esconder o canhão e que recebem dano quando
@@ -17,6 +18,7 @@ public class Base extends Entidade {
      * Construtor da classe Base:
      * @param x : posicao x da Base
      * @param y : posicao y da Base
+     * @param sprite: sprite da Base
      */
     public Base(int x, int y, Sprite sprite) {
         super(x, y, sprite);

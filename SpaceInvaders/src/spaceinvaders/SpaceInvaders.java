@@ -1,4 +1,5 @@
 package spaceinvaders;
+import spaceinvaders.engine.Jogo;
 import java.util.*;
 
 /**
@@ -8,13 +9,14 @@ import java.util.*;
 public class SpaceInvaders {
     /**
      * Metodo main
+     * @param args argumento generico padrao do main
      */
     public static void main(String[] args) {
         Jogo jogo = new Jogo();
-        int delayAliens = 3;
+        int delayAliens = 4;
         while(true){
             jogo.rodar(delayAliens);
-            if(delayAliens >0){
+            if(delayAliens >1){
                 delayAliens--;
             }
             jogo = new Jogo();

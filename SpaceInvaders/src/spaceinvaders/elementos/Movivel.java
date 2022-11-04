@@ -1,4 +1,4 @@
-package spaceinvaders;
+package spaceinvaders.elementos;
 import java.util.*;
 
 /**
@@ -9,8 +9,8 @@ import java.util.*;
 public interface Movivel {
     /**
      * Move determinada entidade
-     * @param x
-     * @param y 
+     * @param x deslocamento em x
+     * @param y deslocamento em y
      */
     public void mover(int x, int y);
 

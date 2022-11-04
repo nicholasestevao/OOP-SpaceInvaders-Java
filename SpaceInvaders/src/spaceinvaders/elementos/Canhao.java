@@ -1,5 +1,7 @@
-package spaceinvaders;
+package spaceinvaders.elementos;
+import spaceinvaders.elementos.Tiro;
 import java.util.*;
+import spaceinvaders.interfaceGrafica.Sprite;
 /**
  * Classe Canhao:
  * Entidade controlada pelo jogador
@@ -14,6 +16,8 @@ public class Canhao extends Entidade implements Movivel {
      * Contrutor da classe Canhao
      * @param x : posicao x do canhao
      * @param y : posicao y do canhao
+     * @param vidas: nro de vidas do canhao
+     * @param sprite: sprite do canhao
      */
     public Canhao(int x, int y, int vidas, Sprite sprite) {
         super(x, y, sprite);
@@ -22,10 +26,11 @@ public class Canhao extends Entidade implements Movivel {
     
     /**
      * Cria um tiro a partir da posicao atual do canhao
+     * @return objeto tiro gerado a partir da posicao do canhao
      */
     public Tiro atirar() {
         int tipo = 0; //tipo tiro canhao
-        return new Tiro(this.getX()-1, this.getY(), tipo, new Sprite("i"));
+        return new Tiro(this.getX()-1, this.getY(), tipo, new Sprite("*"));
     }
 
     /**
@@ -45,6 +50,10 @@ public class Canhao extends Entidade implements Movivel {
         this.vidas--;
     }
     
+    /**
+     * Retorna vida do canhao
+     * @return vida do canhao
+     */
     public int getVida(){
         return this.vidas;
     }

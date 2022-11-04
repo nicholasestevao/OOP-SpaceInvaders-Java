@@ -1,5 +1,7 @@
 
-package spaceinvaders;
+package spaceinvaders.interfaceGrafica;
+
+import spaceinvaders.elementos.Entidade;
 
 public class Tela {
     private char[][] tela;
@@ -11,6 +13,10 @@ public class Tela {
         this.limpaTela();
     }
     
+    /**
+     * Insere entidade na tela
+     * @param ent entidade a ser inserida
+     */
     public void insereTela(Entidade ent){
         if(ent.getY() == 17){
             System.out.println(" oi");
@@ -19,6 +25,9 @@ public class Tela {
         tela[ent.getX()][ent.getY()] = ent.getSprite().getSprite().charAt(0);
     }
     
+    /**
+     * imprime tela no terminal
+     */
     public void imprimeTela(){
         for(int i=0; i< tamY; i++){
             for(int j=0; j< tamX; j++){
@@ -30,6 +39,9 @@ public class Tela {
         
     }
     
+    /**
+     * reseta a tela para o caractere padrao (_)
+     */
     public void limpaTela(){
         for(int i=0; i< tamY; i++){
             for(int j=0; j< tamX; j++){
@@ -38,6 +50,12 @@ public class Tela {
         }
     }
     
+    /**
+     * retorna a sprite (char) de um posicao da tela
+     * @param x posicao x
+     * @param y posicao y
+     * @return sprite (char) da posicao x,y da tela
+     */
     public char getSprite(int x, int y){
         return tela[x][y];
     }
