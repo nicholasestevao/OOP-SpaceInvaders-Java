@@ -48,15 +48,27 @@ public class telaController implements Initializable {
     private Button bJogar;
     
     @FXML
+    private Label lbScore;
+    
+    @FXML
+    private Label lbGameOver;
+    
+    @FXML
     private Pane pPainelPrincipal;
     
     @FXML
     private ImageView imgCanhao;
+    
+    private char[] tecla;
 
     
     @FXML
     public void jogar(){
-        pPainelPrincipal.getChildren().clear();
+        threadJogo = new ThreadJogo(this.pPainelPrincipal, tecla, lbScore, lbGameOver);
+        
+        this.jogo = threadJogo.getJogo();
+        this.bJogar.setDisable(true);
+        this.bJogar.setVisible(false);
         System.out.println("Adicionando canhao");
         System.out.println(jogo.getCanhao().getSprite().getImage().toString());
         ImageView canhaoView = jogo.getCanhao().getSprite().getImage();
@@ -94,7 +106,7 @@ public class telaController implements Initializable {
             pPainelPrincipal.getChildren().add(tiroView);
         }
         
-        
+        threadJogo.start();
         /*int delayAliens = 4;
         while(true){
             jogo.rodar(delayAliens, this.pPainelPrincipal);
@@ -109,11 +121,30 @@ public class telaController implements Initializable {
     }
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {             
-        threadJogo = new ThreadJogo(this.pPainelPrincipal);
-        threadJogo.start();
-        this.jogo = threadJogo.getJogo();
+    public void initialize(URL url, ResourceBundle rb) { 
+        tecla = new char[1];
+        tecla[0] = 'a';        
     }    
+    
+    public void teclaDireitaPressionada(){
+        tecla[0] = 'r';
+        System.out.println("Pressionou tecla direita");
+    }
+    
+    public void teclaEsquerdaPressionada(){
+        tecla[0] = 'l';
+        System.out.println("Pressionou tecla esquerda");
+    }
+    
+    public void teclaEspacoPressionada(){
+        tecla[0] = 'e';
+        System.out.println("Pressionou tecla espaco");
+    }
+    
+    public void teclaEscPressionada(){
+        tecla[0] = 's';
+        System.out.println("Pressionou tecla ESC");
+    }
     
     
     

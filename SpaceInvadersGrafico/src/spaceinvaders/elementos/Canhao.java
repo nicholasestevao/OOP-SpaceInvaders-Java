@@ -36,7 +36,7 @@ public class Canhao extends Entidade implements Movivel {
         tiro.moverPara(this.getX()-1, this.getY());
         tiro.setTipo(tipo);
         System.out.println("Canhao atirou (tiro: "+tiro.getPosition()+") ");
-        tiro.getSprite().getImage().setImage(new Image(getClass().getResourceAsStream("teste.png")));
+        tiro.getSprite().getImage().setImage(new Image(getClass().getResourceAsStream("tiroCanhao.png")));
         tiro.getSprite().getImage().setVisible(true);
         //return new Tiro(this.getX()+1, this.getY(), tipo, new Sprite("tiroAlien.png","|"));
     }

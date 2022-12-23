@@ -5,8 +5,12 @@ import spaceinvaders.elementos.Base;
 import spaceinvaders.elementos.Tiro;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -73,6 +77,8 @@ public class Jogo {
      */
     private Tela tela;
     
+    private char[] op;
+    
     
     public Tela getTela(){
         return this.tela;
@@ -90,10 +96,10 @@ public class Jogo {
      * Construtor da classe Jogo:
      * Inicializa todas as entidades
      */
-    public Jogo() {
+    public Jogo( char[] tecla) {
         //Inicializar todos os objetos
         //Telo 800x600
-        
+        this.op = tecla;
         this.rodando = 0;
         this.pontuacao = 0;
         
@@ -218,11 +224,11 @@ public class Jogo {
      * 
      * @param delayAliens indica atraso de movimentação dos aliens em relacao ao canhao
      */
-    public void rodar(int delayAliens, Pane painel) {
+    public void rodar(int delayAliens, Pane painel, Label lbScore, Label lbGameOver) {
         
         // Variaveis que leem opcao do jogador
-        Scanner s = new Scanner(System.in);
-        char op = 'f';
+        //Scanner s = new Scanner(System.in);
+        //char op = 'f';
         
         // Indica que o jogo esta rodando
         this.rodando = 1;
@@ -253,13 +259,8 @@ public class Jogo {
         
         //Inicializa tela
         tela = new Tela();
-        while(this.rodando == 1){
-            //Imprime opcoes para o jogador
-            System.out.println("Teclas:");
-            System.out.println("Mover para esquerda -> a");
-            System.out.println("Mover para direita -> d");
-            System.out.println("Atirar -> s");
-            System.out.println("Nenhuma ação -> f");            
+        
+        while(this.rodando == 1){           
             //Vetor auxiliar para remocão de componentes
             ArrayList<Integer> remover = new ArrayList<Integer>();
             
@@ -267,7 +268,7 @@ public class Jogo {
             if(canhao.getVida() > 0){
                 tela.insereTela(canhao);
                 if(canhao.getSprite().getSprite().equals("X")){
-                    System.out.println("Canhao reviveu e voltou a posicao inicial");
+                    //System.out.println("Canhao reviveu e voltou a posicao inicial");
                     canhao.setSprite("C");
                     // Volta canhao para posicao inicial
                     canhao.moverPara(14,2);
@@ -278,17 +279,26 @@ public class Jogo {
                 // Fim da fase
                 this.rodando = 0;
                 System.out.println("Você perdeu todas as suas vidas :(");
+                KeyFrame kf= new KeyFrame(Duration.millis(100), new KeyValue(lbGameOver.textProperty(), "Você perdeu todas as suas vidas :("));
+                Timeline t = new Timeline(kf);
+                t.play();
                 break;
             }
             // Verifica fim do jogo
             if(this.rodando == 0){
                 System.out.println("Você perdeu!");
                 System.out.println("Os alienígenas te alcançaram :(");
+                KeyFrame kf= new KeyFrame(Duration.millis(100), new KeyValue(lbGameOver.textProperty(), "Você perdeu!! Os alienígenas te alcançaram :("));
+                Timeline t = new Timeline(kf);
+                t.play();
                 break;
             }
             if(this.naves.size() + flagNaveEspecial == 0){
                 this.rodando = 0;  
                 System.out.println("Parabéns! Você ganhou :)");
+                KeyFrame kf= new KeyFrame(Duration.millis(100), new KeyValue(lbGameOver.textProperty(), "Parabéns! Você ganhou :)"));
+                Timeline t = new Timeline(kf);
+                t.play();
                 break;
             }
             
@@ -330,34 +340,33 @@ public class Jogo {
             
             //Insere naves na tela
             this.naves.forEach( (nave) ->{
-                //System.out.println("Nave em : "+nave.getX() + " "+nave.getY());
                 tela.insereTela(nave);
                 if(nave.getSprite().getSprite().equals("X")){
-                    System.out.println("Removeu nave em "+nave.getX() + " "+nave.getY());
+                    //System.out.println("Removeu nave em "+nave.getX() + " "+nave.getY());
                     remover.add(this.naves.indexOf(nave));
                 }
             });
             
             //Remove naves marcadas com X (explosao)
             for(int i = 0; i <remover.size(); i++){
-                this.naves.get(remover.get(i) - i).getSprite().getImage().setVisible(false);
+                this.naves.get(remover.get(i) - i).getSprite().getImage().setImage(null);
                 this.naves.remove((int) remover.get(i) - i);
             }
             
-            /*remover.forEach(indice -> {  
+            remover.forEach(indice -> {  
                 if(indice < this.naves.size()){
-                    this.naves.get(indice).getSprite().getImage().setVisible(false);
+                    this.naves.get(indice).getSprite().getImage().setImage(null);
                     this.naves.remove((int) indice);
                 }
-            });*/
+            });
             remover.clear();
 
             //Verifica se alguma nave ja passou da linha do canhao (fim do jogo)
-            /*this.naves.forEach(nave -> {
+            this.naves.forEach(nave -> {
                 if(nave.getX() >= this.canhao.getX()){
                     this.rodando = 0;                    
                 }
-            });*/
+            });
 
             
             
@@ -372,123 +381,134 @@ public class Jogo {
 
                 //Uma nave da fileira do canhao atira
                 if(!navesFileiraCanhao.isEmpty()){
-                    int idNaveFilAtira = (int)(System.currentTimeMillis())%(navesFileiraCanhao.size());
+                    int idNaveFilaAtira = (int)(System.currentTimeMillis())%(navesFileiraCanhao.size());
                     Tiro tiro = this.tirosAliens.get(this.numTirosAliens);                    
-                    navesFileiraCanhao.get(Math.abs(idNaveFilAtira)).atirar(tiro);
+                    navesFileiraCanhao.get(Math.abs(idNaveFilaAtira)).atirar(tiro);
                     this.numTirosAliens++;
                     navesFileiraCanhao.clear();
                 }
             }else if(this.numTirosAliens < 4 && System.currentTimeMillis()%5 == 0){//De vez em quando uma nave aleatoria atira
                 int idNaveAleatoriaAtira = (int)(System.currentTimeMillis())%(this.naves.size());
-                System.out.println("Id nave aleatoria: "+ idNaveAleatoriaAtira);
-                System.out.println("Numero naves: "+ this.naves.size());
-                //this.tiros.add(this.naves.get(Math.abs(idNaveAleatoriaAtira)).atirar());
+                //System.out.println("Id nave aleatoria: "+ idNaveAleatoriaAtira);
+                //System.out.println("Numero naves: "+ this.naves.size());
                 Tiro tiro = this.tirosAliens.get(this.numTirosAliens);                    
                 this.naves.get(Math.abs(idNaveAleatoriaAtira)).atirar(tiro);                    
-                System.out.println("nave aleatoria atirou");
+                //System.out.println("nave aleatoria atirou");
                 this.numTirosAliens++;
             }
             
             //Insere bases na tela
             this.bases.forEach( (base) ->{
                 tela.insereTela(base);
-                base.getSprite().setImage("base1.png");
+                base.setImage();
                 if(base.getSprite().getSprite() == "X"){                    
                     remover.add(this.bases.indexOf(base));
                 }
             });
             //Remove bases marcadas com 'X' (explosao)
             for(int i = 0; i<remover.size(); i++){
-                this.bases.get(remover.get(i)-i).getSprite().getImage().setVisible(false);
+                this.bases.get(remover.get(i)-i).getSprite().getImage().setImage(null);
                 this.bases.remove((int) remover.get(i)-i); 
             }
             remover.clear();
             
             
-            
             // Processa os tiros das naves (move e verifica colisoes)
+            int num_tiros_liberados = 0;
             for(int i = 0; i< this.numTirosAliens; i++){
-                System.out.println("Tiro: "+tirosAliens.get(i).getX() + " "+tirosAliens.get(i).getY());
-                //Se o tiro colidiu com um base
-                if(tela.getSprite(tirosAliens.get(i).getX(), tirosAliens.get(i).getY()) == 'B'){
-                    //Tiro colidiu com uma base 
-                    System.out.println("Tiro colidiu base");
-                    for(int j=0; j<bases.size(); j++){
-                       
-                       if(bases.get(j).getX() == tirosAliens.get(i).getX() && bases.get(j).getY() == tirosAliens.get(i).getY()){
-                           System.out.println("Tiro colidiu com base");
-                           bases.get(j).getSprite().setImage("explosao.png");
-                           bases.get(j).reduzirEstado();
-                           if(bases.get(j).getEstado() == 0){
-                               bases.get(j).setSprite("X");
-                               tela.insereTela(bases.get(j));
+                if(!(tirosAliens.get(i).getX() == 0 && tirosAliens.get(i).getY() == 0)){
+                    //System.out.println("Tiro: "+tirosAliens.get(i).getX() + " "+tirosAliens.get(i).getY());
+                    //Se o tiro colidiu com um base
+                    if(tela.getSprite(tirosAliens.get(i).getX(), tirosAliens.get(i).getY()) == 'B'){
+                        //Tiro colidiu com uma base 
+                        //System.out.println("Tiro colidiu base");
+                        for(int j=0; j<bases.size(); j++){                       
+                           if(bases.get(j).getX() == tirosAliens.get(i).getX() && bases.get(j).getY() == tirosAliens.get(i).getY()){
+                               //System.out.println("Tiro colidiu com base");
+                               bases.get(j).getSprite().getImage().setImage(null);
+                               bases.get(j).reduzirEstado();
+                               if(bases.get(j).getEstado() == 0){
+                                   bases.get(j).setSprite("X");
+                                   tela.insereTela(bases.get(j));
+                               }
                            }
-                       }
-                    }
-                    remover.add(i);
-                }else{
-                    // Tiro da nave nao colidiu com uma base
-                    System.out.println("Tiro nave");
-                    if(tirosAliens.get(i).getX() < Tela.tamX -1){                            
-                        char spritePosTiro = tela.getSprite(tirosAliens.get(i).getX()+1, tirosAliens.get(i).getY());
-                        System.out.println("Posicao: "+tirosAliens.get(i).getPosition()+ " "+tela.getSprite(tirosAliens.get(i).getX(), tirosAliens.get(i).getY()));
-
-                        if(spritePosTiro == 'C'){
-                            //Tiro colidiu com o canhao 
-                            System.out.println("Tiro colidiu canhao");
-                            this.canhao.setSprite("X");
-                            this.canhao.getSprite().setImage("explosao.png");
-                            tela.insereTela(this.canhao);
-                            this.canhao.decrementaVida();
-                            remover.add(i);
-                            //break;
-                        }else if(tirosAliens.get(i).getSprite().getImage().isVisible()){                            
-                            tirosAliens.get(i).mover(1, 0);
-                            tela.insereTela(tirosAliens.get(i));
                         }
+                        tirosAliens.get(i).getSprite().getImage().setImage(null);
+                        tirosAliens.get(i).moverPara(0, 0);
+                        num_tiros_liberados++;
                     }else{
-                        System.out.println("Tiro da nave com posicao inválida");
-                        remover.add(i);
-                    }
-                }      
+                        // Tiro da nave nao colidiu com uma base
+                        //System.out.println("Tiro nave");
+                        if(tirosAliens.get(i).getX() < Tela.tamX -1){                            
+                            char spritePosTiro = tela.getSprite(tirosAliens.get(i).getX()+1, tirosAliens.get(i).getY());
+                            //System.out.println("Posicao: "+tirosAliens.get(i).getPosition()+ " "+tela.getSprite(tirosAliens.get(i).getX(), tirosAliens.get(i).getY()));
+
+                            if(spritePosTiro == 'C'){
+                                //Tiro colidiu com o canhao 
+                                //System.out.println("Tiro colidiu canhao");
+                                this.canhao.setSprite("X");
+                                this.canhao.getSprite().setImage("explosao.png");
+                                tela.insereTela(this.canhao);
+                                this.canhao.decrementaVida();
+                                num_tiros_liberados++;
+                                tirosAliens.get(i).getSprite().getImage().setImage(null);
+                                tirosAliens.get(i).moverPara(0, 0);
+                                //break;
+                            }else if(tirosAliens.get(i).getSprite().getImage().isVisible()){                            
+                                tirosAliens.get(i).mover(1, 0);
+                                tela.insereTela(tirosAliens.get(i));
+                            }
+                        }else{
+                            //System.out.println("Tiro da nave com posicao inválida");
+                            tirosAliens.get(i).getSprite().getImage().setImage(null);
+                            tirosAliens.get(i).moverPara(0, 0);
+                            num_tiros_liberados++;
+                        }
+                    }   
+                }
             }
             
             //Remove tiros das naves que colidiram com algo ou chegaram no fim da tela
-            for(int i=0; i< remover.size(); i++){
-                    System.out.println("Removeu tiro da nave: indice "+(remover.get(i)-i));
-                    this.tirosAliens.get((int) remover.get(i) - i).getSprite().getImage().setVisible(false);
-                    this.tirosAliens.get((int) remover.get(i) - i).moverPara(0,0);
-                    //this.tiros.remove((int) remover.get(i));
-                    this.numTirosAliens--;
-                    int j = remover.get(i) - i + 1;
-                    while(j<5 && this.tirosAliens.get(j).getSprite().getImage().isVisible()){
-                        j++;
-                    }
-                    System.out.println("Trocou: "+(remover.get(i) - i)+" com "+(j-1));
-                    Collections.swap(this.tirosAliens, remover.get(i) - i, j-1);
-            }     
+            /*for(int i=remover.size() - 1; i>=0; i--){
+                //System.out.println("Removeu tiro da nave: indice "+(remover.get(i)-i));
+                //this.tirosAliens.get((int) remover.get(i)).getSprite().setImage("teste.png");
+                this.numTirosAliens--;
+                /*int j = remover.get(i) + 1;
+                while(j<5 && this.tirosAliens.get(j).getSprite().getImage() != null){
+                    j++;
+                }
+                //System.out.println("Trocou: "+(remover.get(i) - i)+" com "+(j-1));
+                Collections.swap(this.tirosAliens, remover.get(i), j-1);*/
+            //}
+            this.numTirosAliens -= num_tiros_liberados;
             remover.clear();
             
             //Processa tiro do canhao
             if(flagCanhaoAtirou == 1){
                 //Se o tiro é do canhao
-                System.out.println("Tiro canhao: x:"+tiroCanhao.getX());
-                System.out.println("Canhao: "+this.canhao.getPosition());
+                //System.out.println("Tiro canhao: x:"+tiroCanhao.getX());
+                //System.out.println("Canhao: "+this.canhao.getPosition());
                 if(tiroCanhao.getX() > 1){  
-                    System.out.println("Posicao: "+tiroCanhao.getPosition()+ " "+tela.getSprite(tiroCanhao.getX(), tiroCanhao.getY()));
+                    //System.out.println("Posicao: "+tiroCanhao.getPosition()+ " "+tela.getSprite(tiroCanhao.getX(), tiroCanhao.getY()));
                     if(tela.getSprite(tiroCanhao.getX()-1, tiroCanhao.getY()) == 'Y' ||
                        tela.getSprite(tiroCanhao.getX()-1, tiroCanhao.getY()) == 'N' ||
                        tela.getSprite(tiroCanhao.getX()-1, tiroCanhao.getY()) == 'W' ||
                        tela.getSprite(tiroCanhao.getX()-1, tiroCanhao.getY()) == 'E'){
                         //Tiro colidiu com uma nave 
-                        System.out.println("Colidiu com nave");
-                        Nave nave = this.getNave(tiroCanhao.getX(), tiroCanhao.getY());
+                        //System.out.println("Colidiu com nave");
+                        //tiroCanhao.getSprite().getImage().setVisible(false);
+                        tiroCanhao.getSprite().getImage().setImage(null);
+                        Nave nave = this.getNave(tiroCanhao.getX()-1, tiroCanhao.getY());
+                        
                         if(nave != null){
                             nave.setSprite("X");
+                            nave.getSprite().setImage("explosao.png");
+                            //this.naves.remove(nave);
+                        }else{
+                            //System.out.println("Nave nula");
                         };
-                        flagCanhaoAtirou = 0;
-                        tiroCanhao.getSprite().getImage().setVisible(false);
-                        tiroCanhao.moverPara(0,0);
+                        flagCanhaoAtirou = 0;                        
+                        
                         this.pontuacao += 10;
                         if(tela.getSprite(tiroCanhao.getX(), tiroCanhao.getY()) == 'E'){
                             this.pontuacao +=40;
@@ -502,8 +522,8 @@ public class Jogo {
                 }else{
                     System.out.println("Erro: Posicao do tiro é negativa");
                     flagCanhaoAtirou = 0;
-                    tiroCanhao.getSprite().getImage().setVisible(false);
-                    tiroCanhao.moverPara(0,0);
+                    //tiroCanhao.getSprite().getImage().setVisible(false);
+                    tiroCanhao.getSprite().getImage().setImage(null);
                 }
             }
             
@@ -511,54 +531,52 @@ public class Jogo {
             
             
             // Le  opcao do jogador
-            op = s.next().charAt(0);
+            //op = s.next().charAt(0);
             contReload++;
-            switch (op){
-                case 'a':
+            switch (this.op[0]){
+                case 'l':
                     if(canhao.getY() > 0)
                         this.canhao.mover(0, -1);
+                        this.op[0] = 'a';
                     break;
-                case 'd':
+                case 'r':
                     if(canhao.getY() <Tela.tamY - 1)
                     this.canhao.mover(0, 1);
+                    this.op[0] = 'a';
                     break;
-                case 's':
+                case 'e':
                     //Garante que o canhao só dê um tiro de cada vez
                     if(flagCanhaoAtirou == 0){
-                        System.out.println("Canhao atirou");
                         this.canhao.atirar(tiroCanhao);   
                         flagCanhaoAtirou = 1;
                         tela.insereTela(tiroCanhao);
-                    }                    
+                    }          
+                    this.op[0] = 'a';
                     break;  
-                case 'f':
+                case 's':
                     break;
             }
             
             tela.imprimeTela();
-            /*TranslateTransition trans = new TranslateTransition();
-            trans.setDuration(Duration.millis(3000));
-            trans.setByX(100);
-            trans.setByY(100);
-            trans.setNode(this.canhao.getSprite().getImage());
-            trans.play();*/
-            //tela.imprimeTela2(painel, this.canhao, this.bases, this.naves, this.tiros);
-            //System.out.println("tem "+tiros.size() + " tiros, processou "+cont);
             System.out.println("Vida canhao: "+this.canhao.getVida());
             System.out.println("Pontuação: "+this.pontuacao);
+            
+            KeyFrame kf= new KeyFrame(Duration.millis(100), new KeyValue(lbScore.textProperty(), String.valueOf(this.pontuacao)));
+            Timeline t = new Timeline(kf);
+            t.play();
+               
             System.out.print("Estados base: ");
             this.bases.forEach(base -> {System.out.print(base.getEstado()+" ");});
-            System.out.println("");
             System.out.println("Num tiros: "+this.numTirosAliens);
             for(int i=0; i<5; i++){
                 System.out.println(this.tirosAliens.get(i).getPosition());
             }
             
-            /*try{
-                TimeUnit.MILLISECONDS.sleep(500);
+            try{
+                TimeUnit.MILLISECONDS.sleep(450);
             }catch(Exception e){
                 System.out.println(e.getMessage());
-            }*/
+            }
             
         }
     }

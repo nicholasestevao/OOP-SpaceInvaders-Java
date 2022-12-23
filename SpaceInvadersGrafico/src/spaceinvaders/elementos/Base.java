@@ -33,5 +33,19 @@ public class Base extends Entidade {
         return this.estado;
     }
     
+    public void setImage(){
+        if(this.estado == 100){
+            this.getSprite().setImage("base_100.png");
+        }else if(this.estado == 75){
+            this.getSprite().setImage("base_75.png");
+        }else if(this.estado == 50){
+            this.getSprite().setImage("base_50.png");
+        }else if(this.estado == 25){
+            this.getSprite().setImage("base_25.png");
+        }else{
+            this.getSprite().setImage("base1.png");
+        }
+    }
+    
 
 }

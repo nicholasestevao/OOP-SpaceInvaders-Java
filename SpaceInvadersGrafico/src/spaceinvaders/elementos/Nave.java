@@ -28,10 +28,10 @@ public class Nave extends Entidade implements Movivel {
      */
     public void atirar(Tiro tiro) {
         int tipo = 1; //tipo tiro alien
+        tiro.getSprite().getImage().setVisible(false);
         tiro.moverPara(this.getX()+1, this.getY());
         tiro.setTipo(tipo);
         tiro.getSprite().getImage().setImage(new Image(getClass().getResourceAsStream("tiroAlien.png")));
-        tiro.getSprite().getImage().setVisible(true);
         //return new Tiro(this.getX()+1, this.getY(), tipo, new Sprite("tiroAlien.png","|"));
     }
 
