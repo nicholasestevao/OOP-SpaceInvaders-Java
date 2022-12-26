@@ -13,22 +13,22 @@ import spaceinvaders.elementos.Nave;
 import spaceinvaders.elementos.Tiro;
 import spaceinvaders.engine.Jogo;
 
-public class Tela {
+public class MatrizEntidades {
     private char[][] tela;
     
     public static final int tamX = 16;
     public static final int tamY= 16;
     
-    public Tela(){
+    public MatrizEntidades(){
         this.tela = new char[tamX][tamY];
-        this.limpaTela();
+        this.limpaMatriz();
     }
     
     /**
      * Insere entidade na tela
      * @param ent entidade a ser inserida
      */
-    public void insereTela(Entidade ent){
+    public void insereMatriz(Entidade ent){
         if(ent.getY() == 17){
             System.out.println(ent.getSprite().getSprite());
         }
@@ -38,14 +38,14 @@ public class Tela {
     /**
      * imprime tela no terminal
      */
-    public void imprimeTela(){
+    public void imprimeMatriz(){
         for(int i=0; i< tamY; i++){
             for(int j=0; j< tamX; j++){
                 System.out.print(" "+tela[i][j]+" ");
             }
             System.out.println(" ");
         }
-        this.limpaTela();
+        this.limpaMatriz();
         
     }
     
@@ -53,7 +53,7 @@ public class Tela {
     /**
      * reseta a tela para o caractere padrao (_)
      */
-    public void limpaTela(){
+    public void limpaMatriz(){
         for(int i=0; i< tamY; i++){
             for(int j=0; j< tamX; j++){
                 this.tela[j][i] = '_';

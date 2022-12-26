@@ -44,7 +44,7 @@ public class Nave extends Entidade implements Movivel {
         this.setX(this.getX() + x);
         this.setY(this.getY() + y);
         TranslateTransition trans = new TranslateTransition();
-        trans.setDuration(Duration.millis(500));
+        trans.setDuration(Duration.millis(450));
         trans.setByY(x*50);
         trans.setByX(y*50);
         trans.setNode(this.getSprite().getImage());

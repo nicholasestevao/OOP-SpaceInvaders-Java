@@ -10,15 +10,20 @@ import spaceinvaders.engine.Jogo;
 
 public class ThreadJogo extends Thread{
     private Jogo jogo;
-    private Pane painel;
     private Label lbScore;
     private Label lbGameOver;
+    private char[] tecla;
+    private int delayAliens;
+    private Label lbVidas;
+    private Pane pPainelPrincipal;
     
-    ThreadJogo(Pane painel, char[] tecla, Label lbScore, Label lbGameOver){
+    ThreadJogo( char[] tecla, Label lbScore, Label lbGameOver, Label lbVidas, Pane pPainelPrincipal){
         this.jogo = new Jogo(tecla);
-        this.painel = painel;
         this.lbScore = lbScore;
         this.lbGameOver = lbGameOver;
+        this.tecla = tecla;
+        delayAliens = 4;
+        this.lbVidas = lbVidas;
     }
 
     public Jogo getJogo() {
@@ -26,14 +31,8 @@ public class ThreadJogo extends Thread{
     }
     
     
-    
     public void run(){
-        this.jogo.rodar(3, painel, lbScore, lbGameOver);
-        /*BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
-        String opcao = "";
-        while(!opcao.equals("sair")){
-            //opcao = teclado.readLine();
-        }*/
-        
+        this.jogo.rodar(this.delayAliens, lbScore, lbGameOver, lbVidas);
+        System.out.println("Jogo terminou de rodar");
     }
 }

@@ -24,15 +24,16 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import spaceinvaders.elementos.Base;
 import spaceinvaders.elementos.Canhao;
 import spaceinvaders.elementos.Nave;
 import spaceinvaders.elementos.Tiro;
 import spaceinvaders.engine.Jogo;
-import spaceinvaders.interfaceGrafica.Tela;
-import static spaceinvaders.interfaceGrafica.Tela.tamX;
-import static spaceinvaders.interfaceGrafica.Tela.tamY;
+import spaceinvaders.interfaceGrafica.MatrizEntidades;
+import static spaceinvaders.interfaceGrafica.MatrizEntidades.tamX;
+import static spaceinvaders.interfaceGrafica.MatrizEntidades.tamY;
 
 /**
  *
@@ -51,10 +52,19 @@ public class telaController implements Initializable {
     private Label lbScore;
     
     @FXML
+    private Label lbVidas;
+    
+    @FXML
     private Label lbGameOver;
     
     @FXML
     private Pane pPainelPrincipal;
+    
+    @FXML
+    private Pane pInstrucoes;
+    
+    @FXML
+    private Pane pGameVariables;
     
     @FXML
     private ImageView imgCanhao;
@@ -64,11 +74,11 @@ public class telaController implements Initializable {
     
     @FXML
     public void jogar(){
-        threadJogo = new ThreadJogo(this.pPainelPrincipal, tecla, lbScore, lbGameOver);
-        
+        threadJogo = new ThreadJogo( tecla, lbScore, lbGameOver, lbVidas, pPainelPrincipal);
+        this.pInstrucoes.setVisible(false);
+        this.pGameVariables.setVisible(true);
         this.jogo = threadJogo.getJogo();
         this.bJogar.setDisable(true);
-        this.bJogar.setVisible(false);
         System.out.println("Adicionando canhao");
         System.out.println(jogo.getCanhao().getSprite().getImage().toString());
         ImageView canhaoView = jogo.getCanhao().getSprite().getImage();
@@ -107,23 +117,14 @@ public class telaController implements Initializable {
         }
         
         threadJogo.start();
-        /*int delayAliens = 4;
-        while(true){
-            jogo.rodar(delayAliens, this.pPainelPrincipal);
-            break;
-            if(delayAliens >1){
-                delayAliens--;
-            }else{
-                break;
-            }
-            jogo = new Jogo();
-        }*/
+        
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) { 
         tecla = new char[1];
         tecla[0] = 'a';        
+        this.pGameVariables.setVisible(false);
     }    
     
     public void teclaDireitaPressionada(){
@@ -144,6 +145,8 @@ public class telaController implements Initializable {
     public void teclaEscPressionada(){
         tecla[0] = 's';
         System.out.println("Pressionou tecla ESC");
+        Stage stage = (Stage) this.pPainelPrincipal.getScene().getWindow();
+        stage.close();
     }
     
     
