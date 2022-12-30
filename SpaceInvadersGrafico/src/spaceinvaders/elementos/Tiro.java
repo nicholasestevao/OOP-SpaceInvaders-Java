@@ -36,7 +36,7 @@ public class Tiro extends Entidade implements Movivel {
     public void mover(int x, int y) {
         this.setX(this.getX() + x);
         this.setY(this.getY() + y);
-        System.out.println("Moveu tiro: "+x+" "+y);
+        //System.out.println("Moveu tiro: "+x+" "+y);
         TranslateTransition trans = new TranslateTransition();
         trans.setDuration(Duration.millis(280));
         trans.setToY(this.getX()*50);
@@ -57,7 +57,7 @@ public class Tiro extends Entidade implements Movivel {
         this.getSprite().getImage().setVisible(false);
         TranslateTransition trans = new TranslateTransition();
         trans.setDuration(Duration.millis(5));
-        System.out.println("Moveu para: "+x+" "+y);
+        //System.out.println("Moveu para: "+x+" "+y);
         trans.setToX(y*50);
         trans.setToY(x*50);
         trans.setNode(this.getSprite().getImage());

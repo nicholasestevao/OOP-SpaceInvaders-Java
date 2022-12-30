@@ -303,10 +303,10 @@ public class Jogo {
         matrizEntidades = new MatrizEntidades();
         
         while(this.rodando == 1){    
-            System.out.println("BP 1");
+            
             //Vetor auxiliar para remocão de componentes
             ArrayList<Integer> remover = new ArrayList<Integer>();
-            
+                
             // Insere canhao na tela
             if(canhao.getVida() > 0){
                 matrizEntidades.insereMatriz(canhao);
@@ -337,7 +337,8 @@ public class Jogo {
                 t.play();
                 break;
             }
-            System.out.println("BP 2");
+            
+            
             //Insere nave especial
             if(flagNaveEspecial == 1){
                 matrizEntidades.insereMatriz(naveEspecial);
@@ -418,11 +419,11 @@ public class Jogo {
                 t.play();
                 break;
             }
-
             
-            System.out.println("BP 3");
+            
+            
             //De vez em quando uma nave da fileira do canhao atira
-            if(this.numTirosAliens < 4 && System.currentTimeMillis()%7 == 0){
+            if(this.numTirosAliens < this.tirosAliens.size() -1 && System.currentTimeMillis()%7 == 0){
                 ArrayList<Nave> navesFileiraCanhao = new ArrayList<Nave>();
                 this.naves.forEach((nave)->{
                     if(nave.getY() == canhao.getY()){
@@ -443,7 +444,7 @@ public class Jogo {
                     }  
                     navesFileiraCanhao.clear();
                 }
-            }else if(this.numTirosAliens < 4 && System.currentTimeMillis()%5 == 0){//De vez em quando uma nave aleatoria atira
+            }else if(this.naves.size() > 0 && this.numTirosAliens < 4 && System.currentTimeMillis()%5 == 0){//De vez em quando uma nave aleatoria atira
                 int idNaveAleatoriaAtira = (int)(System.currentTimeMillis())%(this.naves.size());
                 //System.out.println("Id nave aleatoria: "+ idNaveAleatoriaAtira);
                 //System.out.println("Numero naves: "+ this.naves.size());
@@ -458,7 +459,7 @@ public class Jogo {
                 //System.out.println("nave aleatoria atirou");
                 
             }
-            System.out.println("BP 4");
+            
             //Insere bases na tela
             this.bases.forEach( (base) ->{
                 matrizEntidades.insereMatriz(base);
@@ -474,7 +475,6 @@ public class Jogo {
             }
             remover.clear();
             
-            System.out.println("BP 5");
             // Processa os tiros das naves (move e verifica colisoes)
             int num_tiros_liberados = 0;
             for(int i = 0; i< this.tirosAliens.size(); i++){
@@ -530,7 +530,6 @@ public class Jogo {
                     }   
                 }
             }
-            System.out.println("BP 6");
             
             if(num_tiros_liberados <= this.numTirosAliens){
                 this.numTirosAliens -= num_tiros_liberados;
@@ -553,19 +552,19 @@ public class Jogo {
                         //tiroCanhao.getSprite().getImage().setVisible(false);
                         char spriteNave = 'a';
                         if(matrizEntidades.getSprite(tiroCanhao.getX()-1, tiroCanhao.getY()) == 'Y'){
-                            System.out.println("Colidou com Y");
+                            //System.out.println("Colidou com Y");
                             this.pontuacao +=30;
                             spriteNave = 'Y';
                         }else if(matrizEntidades.getSprite(tiroCanhao.getX()-1, tiroCanhao.getY()) == 'N'){
-                            System.out.println("Colidou com N");
+                            //System.out.println("Colidou com N");
                             this.pontuacao +=20;
                             spriteNave = 'N';
                         }else if(matrizEntidades.getSprite(tiroCanhao.getX()-1, tiroCanhao.getY()) == 'W'){
-                            System.out.println("Colidou com W");
+                            //System.out.println("Colidou com W");
                             this.pontuacao +=10;
                             spriteNave = 'W';
                         }else if(matrizEntidades.getSprite(tiroCanhao.getX()-1, tiroCanhao.getY()) == 'E'){
-                            System.out.println("Colidou com E");
+                            //System.out.println("Colidou com E");
                             this.pontuacao +=40;
                             spriteNave = 'E';
                         }
@@ -581,7 +580,6 @@ public class Jogo {
                             if(nave != null){
                                 nave.setSprite("X");
                                 nave.getSprite().setImage("explosao.png");
-                                //this.naves.remove(nave);
                             }else{
                                 //System.out.println("Nave nula");
                             };
@@ -597,18 +595,16 @@ public class Jogo {
                     }
                     
                 }else{
-                    System.out.println("Erro: Posicao do tiro é negativa");
+                    //System.out.println("Erro: Posicao do tiro é negativa");
                     flagCanhaoAtirou = 0;
                     //tiroCanhao.getSprite().getImage().setVisible(false);
                     tiroCanhao.getSprite().getImage().setImage(null);
                 }
             }
             
-            System.out.println("BP 7");
-            
-            
             // opcao do jogador
             contReload++;
+            try{
             switch (this.op[0]){
                 case 'l':
                     if(canhao.getY() > 0)
@@ -633,30 +629,29 @@ public class Jogo {
                     this.rodando = 0;
                     break;
             }
-            System.out.println("BP 8");
-            matrizEntidades.imprimeMatriz();
-            System.out.println("Vida canhao: "+this.canhao.getVida());
+            //matrizEntidades.imprimeMatriz();
+            matrizEntidades.limpaMatriz();
+            //System.out.println("Vida canhao: "+this.canhao.getVida());
             
             KeyFrame kfVidas= new KeyFrame(Duration.millis(1), new KeyValue(lbVidas.textProperty(), String.valueOf(this.canhao.getVida())));
             Timeline tVidas = new Timeline(kfVidas);
             tVidas.play();
             
             
-            System.out.println("Pontuação: "+this.pontuacao);
+            //System.out.println("Pontuação: "+this.pontuacao);
             
             KeyFrame kfScore= new KeyFrame(Duration.millis(1), new KeyValue(lbScore.textProperty(), String.valueOf(this.getPontuacao())));
             Timeline tScore = new Timeline(kfScore);
             tScore.play();
-               
+            }catch(NullPointerException | ArrayIndexOutOfBoundsException e){
+                System.out.println("Erro 10: "+e.getMessage());
+            } 
             /*System.out.print("Estados base: ");
             this.bases.forEach(base -> {System.out.print(base.getEstado()+" ");});
             System.out.println("Num tiros: "+this.numTirosAliens);*/
-            for(int i=0; i<5; i++){
-                System.out.println(this.tirosAliens.get(i).getPosition());
-            }
-            System.out.println("BP 9");
+            
             try{
-                TimeUnit.MILLISECONDS.sleep(300);
+                TimeUnit.MILLISECONDS.sleep(350);
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }

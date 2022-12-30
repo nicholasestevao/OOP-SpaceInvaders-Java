@@ -57,7 +57,7 @@ public class Nave extends Entidade implements Movivel {
      * @param y posicao final do canhao em y
      */
     public void moverPara(int x, int y) {
-        System.out.println("Moveu nave para: "+x+" "+y);        
+        //System.out.println("Moveu nave para: "+x+" "+y);        
         TranslateTransition trans = new TranslateTransition();
         trans.setDuration(Duration.millis(250));
         trans.setToY(0);

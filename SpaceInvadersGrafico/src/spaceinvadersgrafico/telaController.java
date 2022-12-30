@@ -77,14 +77,11 @@ public class telaController implements Initializable {
         this.pGameVariables.setVisible(true);
         this.jogo = threadJogo.getJogo();
         this.bJogar.setDisable(true);
-        System.out.println("Adicionando canhao");
-        System.out.println(jogo.getCanhao().getSprite().getImage().toString());
         ImageView canhaoView = jogo.getCanhao().getSprite().getImage();
         canhaoView.setY(jogo.getCanhao().getX()*50);
         canhaoView.setX(jogo.getCanhao().getY()*50);
         pPainelPrincipal.getChildren().add(canhaoView);
         
-        System.out.println("canhao");
         ArrayList<Base> bases = jogo.getBases();
         for(int i=0; i< bases.size(); i++){
             ImageView baseView = bases.get(i).getSprite().getImage();
@@ -143,24 +140,24 @@ public class telaController implements Initializable {
     
     public void teclaDireitaPressionada(){
         tecla[0] = 'r';
-        System.out.println("Pressionou tecla direita");
+        //System.out.println("Pressionou tecla direita");
     }
     
     public void teclaEsquerdaPressionada(){
         tecla[0] = 'l';
-        System.out.println("Pressionou tecla esquerda");
+        //System.out.println("Pressionou tecla esquerda");
     }
     
     public void teclaEspacoPressionada(){
         tecla[0] = 'e';
-        System.out.println("Pressionou tecla espaco");
+        //System.out.println("Pressionou tecla espaco");
     }
     
     public void teclaEscPressionada(){
         tecla[0] = 's';
-        System.out.println("Pressionou tecla ESC");
+        //System.out.println("Pressionou tecla ESC");
         try{
-                TimeUnit.MILLISECONDS.sleep(250);
+                TimeUnit.MILLISECONDS.sleep(350);
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }

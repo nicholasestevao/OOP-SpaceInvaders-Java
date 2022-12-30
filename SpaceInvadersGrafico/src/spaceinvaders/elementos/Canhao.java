@@ -35,7 +35,7 @@ public class Canhao extends Entidade implements Movivel {
         int tipo = 0; //tipo tiro canhao
         tiro.moverPara(this.getX()-1, this.getY());
         tiro.setTipo(tipo);
-        System.out.println("Canhao atirou (tiro: "+tiro.getPosition()+") ");
+        //System.out.println("Canhao atirou (tiro: "+tiro.getPosition()+") ");
         tiro.getSprite().getImage().setImage(new Image(getClass().getResourceAsStream("tiroCanhao.png")));
         tiro.getSprite().getImage().setVisible(true);
         //return new Tiro(this.getX()+1, this.getY(), tipo, new Sprite("tiroAlien.png","|"));
@@ -65,7 +65,7 @@ public class Canhao extends Entidade implements Movivel {
      * @param y posicao final do canhao em y
      */
     public void moverPara(int x, int y) {
-        System.out.println("Moveu canhao para: "+x+" "+y);        
+        //System.out.println("Moveu canhao para: "+x+" "+y);        
         TranslateTransition trans = new TranslateTransition();
         trans.setDuration(Duration.millis(250));
         trans.setToY(0);
