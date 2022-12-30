@@ -1,6 +1,6 @@
 package spaceinvaders.elementos;
 import java.util.*;
-import spaceinvaders.interfaceGrafica.Sprite;
+import spaceinvadersgrafico.Sprite;
 
 /**
  * Classe Entidade
@@ -76,6 +76,9 @@ public abstract class Entidade {
         this.sprite.setSprite(s);
     }
     
+    /**
+     * @return string com posicao x e y da entidade (para debug)
+     */
     public String getPosition(){
         return this.getX()+" "+ this.getY();
     }

@@ -1,4 +1,4 @@
-package spaceinvaders.interfaceGrafica;
+package spaceinvadersgrafico;
 //import java.util.*;
 //import java.awt.Image;
 

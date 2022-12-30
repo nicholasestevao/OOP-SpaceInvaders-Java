@@ -1,6 +1,6 @@
 package spaceinvaders.elementos;
 import java.util.*;
-import spaceinvaders.interfaceGrafica.Sprite;
+import spaceinvadersgrafico.Sprite;
 /**
  * Classe Base:
  * São os blocos fixos na tela atrás dos quais o jogado pode esconder o canhão e que recebem dano quando
@@ -25,14 +25,23 @@ public class Base extends Entidade {
         this.estado = 100; //estado inicial        
     }   
     
+    /**
+     * Rediz estado da base, quando ela é atingida por um tiro de alienigena
+     */
     public void reduzirEstado(){
         this.estado -=25;
     }
     
+    /**
+     * @return estado atual da base
+     */
     public int getEstado(){
         return this.estado;
     }
     
+    /**
+     * Define imagem da base de acordo com o estado atual dela
+     */
     public void setImage(){
         if(this.estado == 100){
             this.getSprite().setImage("base_100.png");

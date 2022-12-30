@@ -4,7 +4,7 @@ import java.util.*;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
-import spaceinvaders.interfaceGrafica.Sprite;
+import spaceinvadersgrafico.Sprite;
 /**
  * Classe Canhao:
  * Entidade controlada pelo jogador
@@ -36,7 +36,7 @@ public class Canhao extends Entidade implements Movivel {
         tiro.moverPara(this.getX()-1, this.getY());
         tiro.setTipo(tipo);
         System.out.println("Canhao atirou (tiro: "+tiro.getPosition()+") ");
-        tiro.getSprite().getImage().setImage(new Image(getClass().getResourceAsStream("Images/tiroCanhao.png")));
+        tiro.getSprite().getImage().setImage(new Image(getClass().getResourceAsStream("tiroCanhao.png")));
         tiro.getSprite().getImage().setVisible(true);
         //return new Tiro(this.getX()+1, this.getY(), tipo, new Sprite("tiroAlien.png","|"));
     }
@@ -52,17 +52,22 @@ public class Canhao extends Entidade implements Movivel {
         this.setY(this.getY() + y);
         
         TranslateTransition trans = new TranslateTransition();
-        trans.setDuration(Duration.millis(450));
+        trans.setDuration(Duration.millis(250));
         trans.setByY(x*50);
         trans.setByX(y*50);
         trans.setNode(this.getSprite().getImage());
         trans.play();
     }
     
+    /**
+     * Move o canhao
+     * @param x posicao final do canhao em x
+     * @param y posicao final do canhao em y
+     */
     public void moverPara(int x, int y) {
         System.out.println("Moveu canhao para: "+x+" "+y);        
         TranslateTransition trans = new TranslateTransition();
-        trans.setDuration(Duration.millis(450));
+        trans.setDuration(Duration.millis(250));
         trans.setToY(0);
         trans.setToX(0);
         trans.setNode(this.getSprite().getImage());        

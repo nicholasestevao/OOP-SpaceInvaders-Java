@@ -16,7 +16,7 @@
                <children>
                   <ImageView fitHeight="269.0" fitWidth="401.0" layoutX="225.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../spaceinvaders/interfaceGrafica/Images/SpaceInvadersTitle.png" />
+                        <Image url="@Images/SpaceInvadersTitle.png" />
                      </image>
                   </ImageView>
                   <Label layoutX="377.0" layoutY="309.0" text="Tutorial:" textFill="WHITE">
@@ -64,21 +64,26 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="87.0" layoutY="476.0" text="Você perde o jogo se acabarem as suas vidas ou se os aliens te alcançarem." textFill="WHITE">
+                  <Label layoutX="111.0" layoutY="472.0" text="Você perde o jogo se acabarem as suas vidas ou se os aliens te alcançarem." textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="bJogar" layoutX="375.0" layoutY="604.0" mnemonicParsing="false" onAction="#jogar" prefHeight="45.0" prefWidth="71.0" text="JOGAR">
+                  <Button fx:id="bJogar" layoutX="228.0" layoutY="604.0" mnemonicParsing="false" onAction="#jogar" prefHeight="45.0" prefWidth="71.0" text="JOGAR">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Label layoutX="246.0" layoutY="554.0" text="Aperte ESC a qualquer momento para sair" textFill="WHITE">
+                  <Label layoutX="196.0" layoutY="544.0" text="Aperte ESC a qualquer momento para voltar ao menu." textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
+                  <Button fx:id="bSair" layoutX="533.0" layoutY="604.0" mnemonicParsing="false" onAction="#sair" prefHeight="45.0" prefWidth="71.0" text="SAIR">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
                </children>
             </Pane>
          </children></Pane>

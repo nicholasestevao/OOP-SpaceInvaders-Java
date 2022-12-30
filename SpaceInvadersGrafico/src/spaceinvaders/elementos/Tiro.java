@@ -2,7 +2,7 @@ package spaceinvaders.elementos;
 import java.util.*;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
-import spaceinvaders.interfaceGrafica.Sprite;
+import spaceinvadersgrafico.Sprite;
 /**
  * Classe Tiro
  * @author Nicho
@@ -38,7 +38,7 @@ public class Tiro extends Entidade implements Movivel {
         this.setY(this.getY() + y);
         System.out.println("Moveu tiro: "+x+" "+y);
         TranslateTransition trans = new TranslateTransition();
-        trans.setDuration(Duration.millis(400));
+        trans.setDuration(Duration.millis(280));
         trans.setToY(this.getX()*50);
         trans.setToX(this.getY()*50);
         trans.setNode(this.getSprite().getImage());        
@@ -48,6 +48,11 @@ public class Tiro extends Entidade implements Movivel {
         });
     }
     
+    /**
+     * Move o canhao
+     * @param x posicao final do canhao em x
+     * @param y posicao final do canhao em y
+     */
     public void moverPara(int x, int y) {
         this.getSprite().getImage().setVisible(false);
         TranslateTransition trans = new TranslateTransition();
@@ -73,6 +78,10 @@ public class Tiro extends Entidade implements Movivel {
         return this.tipo;
     }
 
+    /**
+     * define tipo do tiro
+     * @param tipo 
+     */
     public void setTipo(int tipo) {
         this.tipo = tipo;
     }

@@ -5,11 +5,13 @@
  */
 package spaceinvadersgrafico;
 
+import spaceinvaders.engine.ThreadJogo;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,9 +33,8 @@ import spaceinvaders.elementos.Canhao;
 import spaceinvaders.elementos.Nave;
 import spaceinvaders.elementos.Tiro;
 import spaceinvaders.engine.Jogo;
-import spaceinvaders.interfaceGrafica.MatrizEntidades;
-import static spaceinvaders.interfaceGrafica.MatrizEntidades.tamX;
-import static spaceinvaders.interfaceGrafica.MatrizEntidades.tamY;
+import static spaceinvaders.engine.MatrizEntidades.tamX;
+import static spaceinvaders.engine.MatrizEntidades.tamY;
 
 /**
  *
@@ -65,16 +66,13 @@ public class telaController implements Initializable {
     
     @FXML
     private Pane pGameVariables;
-    
-    @FXML
-    private ImageView imgCanhao;
-    
-    private char[] tecla;
+        
+    private char[] tecla; // tecla apertada pelo jogador
 
     
     @FXML
     public void jogar(){
-        threadJogo = new ThreadJogo( tecla, lbScore, lbGameOver, lbVidas, pPainelPrincipal);
+        threadJogo = new ThreadJogo( tecla, lbScore, lbGameOver, lbVidas);
         this.pInstrucoes.setVisible(false);
         this.pGameVariables.setVisible(true);
         this.jogo = threadJogo.getJogo();
@@ -85,6 +83,7 @@ public class telaController implements Initializable {
         canhaoView.setY(jogo.getCanhao().getX()*50);
         canhaoView.setX(jogo.getCanhao().getY()*50);
         pPainelPrincipal.getChildren().add(canhaoView);
+        
         System.out.println("canhao");
         ArrayList<Base> bases = jogo.getBases();
         for(int i=0; i< bases.size(); i++){
@@ -100,12 +99,21 @@ public class telaController implements Initializable {
             naveView.setX(naves.get(i).getY()*50);
             pPainelPrincipal.getChildren().add(naveView);
         }
+        
+        Nave naveEspecial = jogo.getNaveEspecial();
+        ImageView naveEspecialView = naveEspecial.getSprite().getImage();
+        naveEspecialView.setX(0);
+        naveEspecialView.setY(50);
+        naveEspecialView.setVisible(false);
+        pPainelPrincipal.getChildren().add(naveEspecialView);
+        
         Tiro tiroCanhao = jogo.getTiroCanhao();
         ImageView tiroCanhaoView = tiroCanhao.getSprite().getImage();
         tiroCanhaoView.setY(0);
         tiroCanhaoView.setX(0);
         tiroCanhaoView.setVisible(false);
         pPainelPrincipal.getChildren().add(tiroCanhaoView);
+        
         
         ArrayList<Tiro> tirosAliens = jogo.getTiros();
         for(int i=0; i<5; i++){
@@ -118,6 +126,12 @@ public class telaController implements Initializable {
         
         threadJogo.start();
         
+    }
+    
+    @FXML
+    public void sair(){
+        Stage stage = (Stage) this.pPainelPrincipal.getScene().getWindow();
+        stage.close();
     }
     
     @Override
@@ -145,10 +159,25 @@ public class telaController implements Initializable {
     public void teclaEscPressionada(){
         tecla[0] = 's';
         System.out.println("Pressionou tecla ESC");
-        Stage stage = (Stage) this.pPainelPrincipal.getScene().getWindow();
-        stage.close();
+        try{
+                TimeUnit.MILLISECONDS.sleep(250);
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        tecla[0] = 'a';
+        this.pInstrucoes.setVisible(true);
+        this.pGameVariables.setVisible(false);
+        for(int i=pPainelPrincipal.getChildren().size() - 1; i>=0; i--){
+            if(pPainelPrincipal.getChildren().get(i).getId() == null){
+                pPainelPrincipal.getChildren().remove(i);
+            }
+               
+        }
+        this.lbGameOver.setText("");
+        this.bJogar.setDisable(false);
+        
     }
     
     
     
-}
+} 

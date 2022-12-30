@@ -1,5 +1,5 @@
 
-package spaceinvaders.interfaceGrafica;
+package spaceinvaders.engine;
 
 import java.util.ArrayList;
 import javafx.application.Application;

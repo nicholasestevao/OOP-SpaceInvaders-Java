@@ -13,5 +13,11 @@ public interface Movivel {
      * @param y deslocamento em y
      */
     public void mover(int x, int y);
-
+    
+    /**
+     * Move a entidade 
+     * @param x posicao final da entidade em x
+     * @param y posicao final da entidade em y
+     */
+    public void moverPara(int x, int y);
 }
